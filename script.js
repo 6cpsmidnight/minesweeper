@@ -52,8 +52,8 @@ board.forEach(row => {
 });
 
 boardElement.style.setProperty("--size", BOARD_SIZE);
-boardElement.style.setProperty("--length", (400 / BOARD_SIZE) + "px");
-boardElement.style.fontSize = (400 / BOARD_SIZE) + "px";
+boardElement.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
+boardElement.style.fontSize = (60 / BOARD_SIZE) + "vh";
 minesLeftTxt.textContent = NUMBER_OF_MINES;
 
 function listMinesLeft() {
