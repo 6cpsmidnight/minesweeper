@@ -10,6 +10,7 @@ import {
 } from "./minesweeper.js"
 
 const messageTxt = document.querySelector(".subtext");
+const minesLeftTxt = document.querySelector("[data-mine-count]");
 
 const selBoardSizeEl = document.getElementById("selBoardSize");
 const selNumberOfMinesEl = document.getElementById("selNumberOfMines");
@@ -17,9 +18,20 @@ const selNumberOfMinesEl = document.getElementById("selNumberOfMines");
 const BOARD_SIZE = (sessionStorage.getItem("BOARD_SIZE") === null) ? 5 : sessionStorage.getItem("BOARD_SIZE");
 const NUMBER_OF_MINES = (sessionStorage.getItem("NUMBER_OF_MINES") === null) ? 5 : sessionStorage.getItem("NUMBER_OF_MINES");
 
-const board = createBoard(BOARD_SIZE, NUMBER_OF_MINES);
-const boardElement = document.querySelector(".board");
-const minesLeftTxt = document.querySelector("[data-mine-count]");
+if ((BOARD_SIZE * BOARD_SIZE) >= NUMBER_OF_MINES) {
+    var board = createBoard(BOARD_SIZE, NUMBER_OF_MINES);
+} else {
+    console.log("FUARK");
+    minesLeftTxt.textContent = "TOO MANY!";
+    messageTxt.classList.add("scale-1-anim-1000ms");
+    setTimeout(() => {
+        messageTxt.classList.remove("scale-1-anim-1000ms");
+    }, 1000);
+}
+
+
+const boardEl = document.querySelector(".board");
+const boardChildEl = document.querySelector(".board>*");
 
 selBoardSizeEl.value = BOARD_SIZE;
 selNumberOfMinesEl.value = NUMBER_OF_MINES;
@@ -38,7 +50,7 @@ let mineRevealDelay = 0;
 
 board.forEach(row => {
     row.forEach(tile => {
-        boardElement.append(tile.element);
+        boardEl.append(tile.element);
         tile.element.addEventListener("click", () => {
             revealTile(board, tile);
             checkGameEnd();
@@ -51,10 +63,11 @@ board.forEach(row => {
     });
 });
 
-boardElement.style.setProperty("--size", BOARD_SIZE);
-boardElement.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
-boardElement.style.fontSize = (60 / BOARD_SIZE) + "vh";
 minesLeftTxt.textContent = NUMBER_OF_MINES;
+boardEl.style.setProperty("--size", BOARD_SIZE);
+boardEl.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
+boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
+boardChildEl.borderWidth = (BOARD_SIZE >= 50) ? "1px" : "2px";
 
 function listMinesLeft() {
     const markedTilesCount = board.reduce((count, row) => {
@@ -71,18 +84,18 @@ function checkGameEnd() {
     const lose = checkLose(board);
 
     if (win || lose) {
-        boardElement.addEventListener("click", stopProp, {
+        boardEl.addEventListener("click", stopProp, {
             capture: true
         }, false);
-        boardElement.addEventListener("contextmenu", stopProp, {
+        boardEl.addEventListener("contextmenu", stopProp, {
             capture: true
         }, false);
 
         messageTxt.textContent = (win) ? "You win!" : "You lose";
         messageTxt.style.color = (win) ? "green" : "red";
-        messageTxt.classList.add("scale-1");
+        messageTxt.classList.add("scale-1-anim-1000ms");
         setTimeout(() => {
-            messageTxt.classList.remove("scale-1");
+            messageTxt.classList.remove("scale-1-anim-1000ms");
         }, 1000);
     }
 
