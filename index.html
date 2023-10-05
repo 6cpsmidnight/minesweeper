@@ -13,6 +13,24 @@
     <div class="subtext">
         Mines Left: <span data-mine-count></span>
     </div>
+    <form id="selectGameParameters">
+        <label for="selBoardSize">Size</label>
+        <select id="selBoardSize" name="boardSize">
+            <div>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+            </div>
+        </select>
+        <label for="selNumberOfMinest">Mines</label>
+        <select id="selNumberOfMines" name="numberOfMines">
+            <div>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+            </div>
+        </select>
+    </form>
     <div class="board"></div>
 
     <script src="script.js" type="module"></script>

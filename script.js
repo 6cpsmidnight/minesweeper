@@ -9,13 +9,32 @@ import {
     checkLose,
 } from "./minesweeper.js"
 
-const BOARD_SIZE = 10;
-const NUMBER_OF_MINES = 10;
+const messageTxt = document.querySelector(".subtext");
+
+const selBoardSizeEl = document.getElementById("selBoardSize");
+const selNumberOfMinesEl = document.getElementById("selNumberOfMines");
+
+const BOARD_SIZE = (sessionStorage.getItem("BOARD_SIZE") === null) ? 5 : sessionStorage.getItem("BOARD_SIZE");
+const NUMBER_OF_MINES = (sessionStorage.getItem("NUMBER_OF_MINES") === null) ? 5 : sessionStorage.getItem("NUMBER_OF_MINES");
 
 const board = createBoard(BOARD_SIZE, NUMBER_OF_MINES);
 const boardElement = document.querySelector(".board");
 const minesLeftTxt = document.querySelector("[data-mine-count]");
-const messageTxt = document.querySelector(".subtext");
+
+selBoardSizeEl.value = BOARD_SIZE;
+selNumberOfMinesEl.value = NUMBER_OF_MINES;
+
+selBoardSizeEl.addEventListener("change", () => {
+    sessionStorage.setItem("BOARD_SIZE", selBoardSizeEl.value);
+    location.reload();
+}, false);
+
+selNumberOfMinesEl.addEventListener("change", () => {
+    sessionStorage.setItem("NUMBER_OF_MINES", selNumberOfMinesEl.value);
+    location.reload();
+}, false);
+
+let mineRevealDelay = 0;
 
 board.forEach(row => {
     row.forEach(tile => {
@@ -23,15 +42,18 @@ board.forEach(row => {
         tile.element.addEventListener("click", () => {
             revealTile(board, tile);
             checkGameEnd();
-        });
+        }, false);
         tile.element.addEventListener("contextmenu", e => {
             e.preventDefault();
             markTile(tile);
             listMinesLeft();
-        });
+        }, false);
     });
 });
+
 boardElement.style.setProperty("--size", BOARD_SIZE);
+boardElement.style.setProperty("--length", (400 / BOARD_SIZE) + "px");
+boardElement.style.fontSize = (400 / BOARD_SIZE) + "px";
 minesLeftTxt.textContent = NUMBER_OF_MINES;
 
 function listMinesLeft() {
@@ -49,11 +71,19 @@ function checkGameEnd() {
     const lose = checkLose(board);
 
     if (win || lose) {
-        boardElement.addEventListener("click", stopProp, { capture:true });
-        boardElement.addEventListener("contextmenu", stopProp, { capture:true });
+        boardElement.addEventListener("click", stopProp, {
+            capture: true
+        }, false);
+        boardElement.addEventListener("contextmenu", stopProp, {
+            capture: true
+        }, false);
 
         messageTxt.textContent = (win) ? "You win!" : "You lose";
         messageTxt.style.color = (win) ? "green" : "red";
+        messageTxt.classList.add("scale-1");
+        setTimeout(() => {
+            messageTxt.classList.remove("scale-1");
+        }, 1000);
     }
 
     if (win) {
@@ -61,16 +91,19 @@ function checkGameEnd() {
     } else if (lose) {
         board.forEach(row => {
             row.forEach(tile => {
-                if (tile.TILE_STATUSES === TILE_STATUSES.MARKED) markTile;
-                if (tile.mine) revealTile(board, tile);
+                mineRevealDelay++;
+                setTimeout(() => {
+                    if (tile.TILE_STATUSES === TILE_STATUSES.MARKED) markTile;
+                    if (tile.mine) revealTile(board, tile);
+                }, mineRevealDelay * 15);
             });
         });
     }
-    
+
 }
 
 function stopProp(e) {
-    e.stopImmediatePropagation()
+    e.stopImmediatePropagation();
 }
 
 function sleep(ms) {

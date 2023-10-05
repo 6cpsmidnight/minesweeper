@@ -8,30 +8,48 @@ body {
   background-color: #333;
   display: flex;
   align-items: center;
-  font-size: 50px;
   flex-direction: column;
-  color: white;
+  color: #fff;
 }
 
 .title {
   font-family: 'Courier New', Courier, monospace;
+  font-size: 50px;
   margin-top: 20px;
 }
 
 .subtext {
-  color: #CCC;
+  color: #ccc;
   font-family: monospace;
   font-size: 25px;
   margin-bottom: 10px;
 }
 
+#selectGameParameters {
+  font-family: monospace;
+  margin-bottom: 5px;
+}
+
+#selectGameParameters label {
+  font-size: 25px;
+}
+
+#selectGameParameters select {
+  color: #fff;
+  background-color: #777;
+  font-size: 20px;
+  border: 2px solid #bbb;
+  cursor: pointer;
+}
+
 .board {
   display: inline-grid;
   padding: 10px;
-  grid-template-columns: repeat(var(--size), 60px);
-  grid-template-rows: repeat(var(--size), 60px);
+  grid-template-columns: repeat(var(--size), var(--length));
+  grid-template-rows: repeat(var(--size), var(--length));
   gap: 4px;
   font-family: monospace;
+  font-size: 50px;
   background-color: #777;
 }
 
@@ -41,18 +59,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
-  border: 2px solid #BBB;
+  color: #fff;
+  border: 2px solid #bbb;
   user-select: none;
 }
 
 .board>[data-status="hidden"] {
-  background-color: #BBB;
+  background-color: #bbb;
   cursor: pointer;
 }
 
 .board>[data-status="mine"] {
-  background-color: red;
+  background-color: #f00;
 }
 
 .board>[data-status="number"] {
@@ -60,6 +78,26 @@ body {
 }
 
 .board>[data-status="marked"] {
-  background-color: yellow;
+  background-color: #ff0;
   cursor: pointer;
+}
+
+.scale-1 {
+  animation-name: scale-1;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+}
+
+@keyframes scale-1 {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
