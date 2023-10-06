@@ -21,7 +21,6 @@ const NUMBER_OF_MINES = (sessionStorage.getItem("NUMBER_OF_MINES") === null) ? 5
 if ((BOARD_SIZE * BOARD_SIZE) >= NUMBER_OF_MINES) {
     var board = createBoard(BOARD_SIZE, NUMBER_OF_MINES);
 } else {
-    console.log("FUARK");
     minesLeftTxt.textContent = "TOO MANY!";
     messageTxt.classList.add("scale-1-anim-1000ms");
     setTimeout(() => {
@@ -63,11 +62,20 @@ board.forEach(row => {
     });
 });
 
+const windowWidth = window.innerWidth;
+const innerBoardWidth = windowWidth * .75;
+
 minesLeftTxt.textContent = NUMBER_OF_MINES;
 boardEl.style.setProperty("--size", BOARD_SIZE);
-boardEl.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
+if ((innerBoardWidth / BOARD_SIZE) + "px" < windowWidth) {
+    boardEl.style.setProperty("--length", (innerBoardWidth / BOARD_SIZE) + "px");
+    boardEl.style.fontSize = (innerBoardWidth / BOARD_SIZE) + "px";
+} else {
+    boardEl.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
+    boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
+}
 boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
-boardChildEl.borderWidth = (BOARD_SIZE >= 50) ? "1px" : "2px";
+document.querySelector(".board>*").style.borderWidth = (BOARD_SIZE >= 50) ? "1px" : "2px";
 
 function listMinesLeft() {
     const markedTilesCount = board.reduce((count, row) => {
