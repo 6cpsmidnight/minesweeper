@@ -69,16 +69,15 @@ minesLeftTxt.textContent = NUMBER_OF_MINES;
 boardEl.style.setProperty("--size", BOARD_SIZE);
 
 // For possible future use:
-// console.log(boardWidth);
-// console.log((innerBoardChildWidth / BOARD_SIZE));
-// console.log(windowWidth);
+// console.log("windowWidth:" + windowWidth);
+// console.log("boardWidth:" + boardWidth);
+// console.log("innerBoardChildWidth:" + innerBoardChildWidth);
+// console.log("innerBoardChildWidth/BOARD_SIZE:" + (innerBoardChildWidth / BOARD_SIZE));
 
-if (boardWidth > (windowWidth / 2)) {
-    console.log("FUCK");
+if (boardWidth > (windowWidth / (25 / BOARD_SIZE))) {
     boardEl.style.setProperty("--length", (innerBoardChildWidth / BOARD_SIZE) + "px");
-    boardEl.style.fontSize = (innerBoardChildWidth / BOARD_SIZE) + "px";
+    boardEl.style.fontSize = (boardWidth / BOARD_SIZE) + "px";
 } else {
-    console.log("FUCK FUCK");
     boardEl.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
     boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
 }
