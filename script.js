@@ -63,13 +63,13 @@ board.forEach(row => {
 });
 
 const windowWidth = window.innerWidth;
-const innerBoardWidth = windowWidth * .75;
+const innerBoardChildWidth = ((windowWidth - 20) - (4 * BOARD_SIZE)) * .75;
 
 minesLeftTxt.textContent = NUMBER_OF_MINES;
 boardEl.style.setProperty("--size", BOARD_SIZE);
-if ((innerBoardWidth / BOARD_SIZE) + "px" < windowWidth) {
-    boardEl.style.setProperty("--length", (innerBoardWidth / BOARD_SIZE) + "px");
-    boardEl.style.fontSize = (innerBoardWidth / BOARD_SIZE) + "px";
+if ((innerBoardChildWidth / BOARD_SIZE) + "px" < windowWidth) {
+    boardEl.style.setProperty("--length", (innerBoardChildWidth / BOARD_SIZE) + "px");
+    boardEl.style.fontSize = (innerBoardChildWidth / BOARD_SIZE) + "px";
 } else {
     boardEl.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
     boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
