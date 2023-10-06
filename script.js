@@ -30,7 +30,6 @@ if ((BOARD_SIZE * BOARD_SIZE) >= NUMBER_OF_MINES) {
 
 
 const boardEl = document.querySelector(".board");
-const boardChildEl = document.querySelector(".board>*");
 
 selBoardSizeEl.value = BOARD_SIZE;
 selNumberOfMinesEl.value = NUMBER_OF_MINES;
@@ -63,19 +62,28 @@ board.forEach(row => {
 });
 
 const windowWidth = window.innerWidth;
-const innerBoardChildWidth = ((windowWidth - 20) - (4 * BOARD_SIZE)) * .75;
+const boardWidth = boardEl.clientHeight;
+const innerBoardChildWidth = ((windowWidth - 20) - (4 * BOARD_SIZE)) * .9;
 
 minesLeftTxt.textContent = NUMBER_OF_MINES;
 boardEl.style.setProperty("--size", BOARD_SIZE);
-if ((innerBoardChildWidth / BOARD_SIZE) + "px" < windowWidth) {
+
+// For possible future use:
+// console.log(boardWidth);
+// console.log((innerBoardChildWidth / BOARD_SIZE));
+// console.log(windowWidth);
+
+if (boardWidth > (windowWidth / 2)) {
+    console.log("FUCK");
     boardEl.style.setProperty("--length", (innerBoardChildWidth / BOARD_SIZE) + "px");
     boardEl.style.fontSize = (innerBoardChildWidth / BOARD_SIZE) + "px";
 } else {
+    console.log("FUCK FUCK");
     boardEl.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
     boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
 }
+
 boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
-document.querySelector(".board>*").style.borderWidth = (BOARD_SIZE >= 50) ? "1px" : "2px";
 
 function listMinesLeft() {
     const markedTilesCount = board.reduce((count, row) => {
@@ -130,3 +138,17 @@ function stopProp(e) {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+// function crtAndAppRstBtn() {
+//     const reset = document.createElement("p");
+//     reset.setAttribute("id", "reset");
+//     reset.style.marginTop = "-10px"
+//     reset.classList.add("fade-in-anim-5000ms");
+//     reset.innerHTML = "<p>↻</p>";
+//     messageTxt.appendChild(reset);
+//     sleep(3000).then(() => {
+//         cPSCounter.setAttribute("onclick", "location.reload();");
+//     });
+// }
+
+// crtAndAppRstBtn();
