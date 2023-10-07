@@ -63,26 +63,26 @@ board.forEach(row => {
 
 const windowWidth = window.innerWidth;
 const boardWidth = boardEl.clientHeight;
-const innerBoardChildWidth = ((windowWidth - 20) - (4 * BOARD_SIZE)) * .9;
+const innerBoardChildWidth = ((windowWidth - 20) - (4 * BOARD_SIZE));
 
 minesLeftTxt.textContent = NUMBER_OF_MINES;
 boardEl.style.setProperty("--size", BOARD_SIZE);
 
 // For possible future use:
-// console.log("windowWidth:" + windowWidth);
-// console.log("boardWidth:" + boardWidth);
-// console.log("innerBoardChildWidth:" + innerBoardChildWidth);
-// console.log("innerBoardChildWidth/BOARD_SIZE:" + (innerBoardChildWidth / BOARD_SIZE));
+console.log("windowWidth:" + windowWidth);
+console.log("boardWidth:" + boardWidth);
+console.log("innerBoardChildWidth:" + innerBoardChildWidth);
+console.log("innerBoardChildWidth/BOARD_SIZE:" + (innerBoardChildWidth / BOARD_SIZE));
 
-if (boardWidth > (windowWidth / (25 / BOARD_SIZE))) {
-    boardEl.style.setProperty("--length", (innerBoardChildWidth / BOARD_SIZE) + "px");
-    boardEl.style.fontSize = (boardWidth / BOARD_SIZE) + "px";
+// console.log(boardWidth > (windowWidth / (25 / BOARD_SIZE)));
+
+if (boardWidth > (windowWidth / 2)) {
+    boardEl.style.setProperty("--length", (innerBoardChildWidth / BOARD_SIZE / 1.5) + "px");
+    boardEl.style.fontSize = (innerBoardChildWidth / BOARD_SIZE / 1.5) + "px";
 } else {
     boardEl.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
-    boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
+    boardEl.style.fontSize = (60 / BOARD_SIZE / 1.2) + "vh";
 }
-
-boardEl.style.fontSize = (60 / BOARD_SIZE) + "vh";
 
 function listMinesLeft() {
     const markedTilesCount = board.reduce((count, row) => {
