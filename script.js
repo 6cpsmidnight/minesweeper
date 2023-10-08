@@ -68,14 +68,6 @@ const innerBoardChildWidth = ((windowWidth - 20) - (4 * BOARD_SIZE));
 minesLeftTxt.textContent = NUMBER_OF_MINES;
 boardEl.style.setProperty("--size", BOARD_SIZE);
 
-// For possible future use:
-console.log("windowWidth:" + windowWidth);
-console.log("boardWidth:" + boardWidth);
-console.log("innerBoardChildWidth:" + innerBoardChildWidth);
-console.log("innerBoardChildWidth/BOARD_SIZE:" + (innerBoardChildWidth / BOARD_SIZE));
-
-// console.log(boardWidth > (windowWidth / (25 / BOARD_SIZE)));
-
 if (boardWidth > (windowWidth / 2)) {
     boardEl.style.setProperty("--length", (innerBoardChildWidth / BOARD_SIZE / 1.5) + "px");
     boardEl.style.fontSize = (innerBoardChildWidth / BOARD_SIZE / 1.5) + "px";
