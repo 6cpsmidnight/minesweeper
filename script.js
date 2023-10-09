@@ -70,7 +70,7 @@ boardEl.style.setProperty("--size", BOARD_SIZE);
 
 if (boardWidth > (windowWidth / 2)) {
     boardEl.style.setProperty("--length", (innerBoardChildWidth / BOARD_SIZE / 1.5) + "px");
-    boardEl.style.fontSize = (innerBoardChildWidth / BOARD_SIZE / 1.5) + "px";
+    boardEl.style.fontSize = ((innerBoardChildWidth / BOARD_SIZE / 1.5) - 2) + "px";
 } else {
     boardEl.style.setProperty("--length", (60 / BOARD_SIZE) + "vh");
     boardEl.style.fontSize = (60 / BOARD_SIZE / 1.2) + "vh";
