@@ -1,144 +1,138 @@
 // Logic
 
 export const TILE_STATUSES = {
-    HIDDEN: "hidden",
-    MINE: "mine",
-    NUMBER: "number",
-    MARKED: "marked",
-}
+  HIDDEN: "hidden",
+  MINE: "mine",
+  NUMBER: "number",
+  MARKED: "marked",
+};
 
 export function createBoard(boardSize, numberOfMines) {
-    const board = [];
-    const minePositions = getMinePositions(boardSize, numberOfMines);
+  const board = [];
+  const minePositions = getMinePositions(boardSize, numberOfMines);
 
-    for (let x = 0; x < boardSize; x++) {
-        const row = [];
-        for (let y = 0; y < boardSize; y++) {
-            const element = document.createElement("div");
-            element.dataset.status = TILE_STATUSES.HIDDEN;
+  for (let x = 0; x < boardSize; x++) {
+    const row = [];
+    for (let y = 0; y < boardSize; y++) {
+      const element = document.createElement("div");
+      element.dataset.status = TILE_STATUSES.HIDDEN;
 
-            const tile = {
-                element,
-                x,
-                y,
-                mine: minePositions.some(positionMatch.bind(
-                    null, 
-                    {
-                        x,
-                        y,
-                    }
-                )),
-                get status() {
-                    return this.element.dataset.status;
-                },
-                set status(value) {
-                    this.element.dataset.status = value;
-                }
-            }
+      const tile = {
+        element,
+        x,
+        y,
+        mine: minePositions.some(
+          positionMatch.bind(null, {
+            x,
+            y,
+          })
+        ),
+        get status() {
+          return this.element.dataset.status;
+        },
+        set status(value) {
+          this.element.dataset.status = value;
+        },
+      };
 
-            row.push(tile);
-        }
-        board.push(row);
+      row.push(tile);
     }
+    board.push(row);
+  }
 
-    return board;
+  return board;
 }
 
 export function markTile(tile) {
-    if (
-        tile.status !== TILE_STATUSES.HIDDEN &&
-        tile.status !== TILE_STATUSES.MARKED
-    ) {
-        return;
-    }
+  if (
+    tile.status !== TILE_STATUSES.HIDDEN &&
+    tile.status !== TILE_STATUSES.MARKED
+  ) {
+    return;
+  }
 
-    if (tile.status === TILE_STATUSES.MARKED) {
-        tile.status = TILE_STATUSES.HIDDEN;
-    } else {
-        tile.status = TILE_STATUSES.MARKED;
-    }
+  if (tile.status === TILE_STATUSES.MARKED) {
+    tile.status = TILE_STATUSES.HIDDEN;
+  } else {
+    tile.status = TILE_STATUSES.MARKED;
+  }
 }
 
 export function revealTile(board, tile) {
-    if (tile.status !== TILE_STATUSES.HIDDEN) {
-        return;
-    }
+  if (tile.status !== TILE_STATUSES.HIDDEN) {
+    return;
+  }
 
-    if (tile.mine) {
-        tile.status = TILE_STATUSES.MINE;
-        return;
-    }
+  if (tile.mine) {
+    tile.status = TILE_STATUSES.MINE;
+    return;
+  }
 
-    tile.status = TILE_STATUSES.NUMBER;
-    const adjacentTiles = nearbyTiles(board, tile);
-    const mines = adjacentTiles.filter(t => t.mine);
-    if (mines.length === 0) {
-        adjacentTiles.forEach(revealTile.bind(null, board));
-    } else {
-        tile.element.textContent = mines.length;
-    }
+  tile.status = TILE_STATUSES.NUMBER;
+  const adjacentTiles = nearbyTiles(board, tile);
+  const mines = adjacentTiles.filter((t) => t.mine);
+  if (mines.length === 0) {
+    adjacentTiles.forEach(revealTile.bind(null, board));
+  } else {
+    tile.element.textContent = mines.length;
+  }
 }
 
 export function checkWin(board) {
-    return board.every(row => {
-        return row.every(tile => {
-            return (
-                tile.status === TILE_STATUSES.NUMBER ||
-                (tile.mine &&
-                    (tile.status === TILE_STATUSES.HIDDEN ||
-                    tile.status === TILE_STATUSES.MARKED))
-            );
-        });
+  return board.every((row) => {
+    return row.every((tile) => {
+      return (
+        tile.status === TILE_STATUSES.NUMBER ||
+        (tile.mine &&
+          (tile.status === TILE_STATUSES.HIDDEN ||
+            tile.status === TILE_STATUSES.MARKED))
+      );
     });
+  });
 }
 
 export function checkLose(board) {
-    return board.some(row => {
-        return row.some(tile => {
-            return tile.status === TILE_STATUSES.MINE;
-        });
+  return board.some((row) => {
+    return row.some((tile) => {
+      return tile.status === TILE_STATUSES.MINE;
     });
+  });
 }
 
 function getMinePositions(boardSize, numberOfMines) {
-    const positions = [];
+  const positions = [];
 
-    while (positions.length < numberOfMines) {
-        const position = {
-            x: randomNumber(boardSize),
-            y: randomNumber(boardSize),
-        }
+  while (positions.length < numberOfMines) {
+    const position = {
+      x: randomNumber(boardSize),
+      y: randomNumber(boardSize),
+    };
 
-        if (!positions.some(positionMatch.bind(null, position))) {
-            positions.push(position);
-        }
+    if (!positions.some(positionMatch.bind(null, position))) {
+      positions.push(position);
     }
+  }
 
-    return positions;
+  return positions;
 }
 
 function positionMatch(a, b) {
-    return a.x === b.x & a.y === b.y;
+  return (a.x === b.x) & (a.y === b.y);
 }
 
 function randomNumber(size) {
-    return Math.floor(Math.random() * size);
+  return Math.floor(Math.random() * size);
 }
 
-function nearbyTiles(
-    board, {
-        x,
-        y,
-    }
-) {
-    const tiles = [];
+function nearbyTiles(board, { x, y }) {
+  const tiles = [];
 
-    for (let xOffSet = -1; xOffSet <= 1; xOffSet++) {
-        for (let yOffSet = -1; yOffSet <= 1; yOffSet++) {
-            const tile = board[x + xOffSet]?.[y + yOffSet];
-            if (tile) tiles.push(tile);
-        }
+  for (let xOffSet = -1; xOffSet <= 1; xOffSet++) {
+    for (let yOffSet = -1; yOffSet <= 1; yOffSet++) {
+      const tile = board[x + xOffSet]?.[y + yOffSet];
+      if (tile) tiles.push(tile);
     }
+  }
 
-    return tiles;
+  return tiles;
 }
